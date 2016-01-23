@@ -1,0 +1,41 @@
+Script started on Tue 19 Jan 2016 09:00:19 AM EST
+cango@matrix:~/Adat/OOP345/w1> whoami
+cango
+cango@matrix:~/Adat/OOP345/w1> cat w1.cpp
+#include <iostream>
+#include "CString.h"
+#include "process.h"
+
+int main(int argc, char *argv[], char *env[])
+{
+	std::cout << "Command Line : ";
+	for (int i = 0; i < argc; i++)
+		{std::cout << argv[i] << (i == argc - 1 ? "\n" : " ");}
+
+	if (argc == 1)
+	{
+		std::cerr << "Insufficient number of arguments (min 1)\n";
+		return 1;
+	}
+
+	std::cout << "Maximum number of characters stored : " << MAX << "\n";
+
+	for (int i = 1; i < argc; i++)
+	{
+		std::cout << i << ": ";
+		process(argv[i]);
+	}
+
+}cango@matrix:~/Adat/OOP345/w1> g++ -o w1 w1.cpp CString.cpp process.cpp
+cango@matrix:~/Adat/OOP345/w1> w1 oop345 btp305
+Command Line : w1 oop345 btp305
+Maximum number of characters stored : 3
+1: oop
+2: btp
+cango@matrix:~/Adat/OOP345/w1> w1
+Command Line : w1
+Insufficient number of arguments (min 1)
+cango@matrix:~/Adat/OOP345/w1> exit
+exit
+
+Script done on Tue 19 Jan 2016 09:01:01 AM EST
