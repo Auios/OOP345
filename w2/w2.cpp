@@ -1,6 +1,8 @@
+//g++ -std=c++0x w2.cpp
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 namespace w2
 {
@@ -83,14 +85,15 @@ namespace w2
 			std::fstream os(fileName, std::ios::out | std::ios::trunc);
 			if (os)
 			{
+				os << count << ";\n";
+				for(int i=0; i < count; i++)
+				{
+					os << stations[i].getName() << ";" << stations[i].inStock(PASS_STUDENT) << " " << stations[i].inStock(PASS_ADULT) << "\n";
+				}
 				// Write station count + ';' + '\n'
 				// For each stations
-					// write name ';' student count ' ' adult count '\n'
+				// write name ';' student count ' ' adult count '\n'
 				os.close();
-			}
-			else
-			{
-
 			}
 			delete[] stations;
 		}
@@ -135,17 +138,20 @@ namespace w2
 
 		void update()
 		{
+			std::cout
+				<< "Passes Sold :" << "\n"
+				<< "-------------" << "\n";
 			for (int i = 0; i < count; i++)
 			{
-				std::cout << "Station " << stations[i].getName() << ":\n";
-
 				int s, a;
 
-				std::cout << "Enter adult pass sales:";
-				std::cin >> a;
+				std::cout << stations[i].getName() << ":\n";
 
-				std::cout << "Enter student pass sales:";
+				std::cout << "Student Passes sold : ";
 				std::cin >> s;
+
+				std::cout << "Adult   Passes sold : ";
+				std::cin >> a;
 
 				//std::cout << s << " ~~~ " << a << "\n"; //Debug
 
@@ -171,19 +177,53 @@ namespace w2
 
 		void restock()
 		{
+			std::cout
+				<< "Passes Added :" << "\n"
+				<< "--------------" << "\n";
 
+			for(int i = 0; i < count; i++)
+			{
+				int s,a;
+
+				std::cout << stations[i].getName() << ":\n";
+
+				std::cout << "Student Passes added : ";
+				std::cin >> s;
+				if(s > 0)
+				{
+					stations[i].update(PASS_STUDENT,s);
+				}
+
+				std::cout << "Adult   	Passes added : ";
+				std::cin >> a;
+				if(a > 0)
+				{
+					stations[i].update(PASS_ADULT,a);
+				}
+			}
 		}
 
 		void report()
 		{
+			std::cout
+				<< "Passes in stock : Student Adult" << "\n"
+				<< "-------------------------------" << "\n";
+
 			for (int i = 0; i < count; i++)
 			{
+				std::cout
+					<< std::setw(18) << std::left << stations[i].getName() << " "
+					<< std::setw(6) << std::left << stations[i].inStock(PASS_STUDENT) << " "
+					<< station[i].inStock(PASS_ADULT) << "\n";
+
+				/*
 				std::cout
 					<< "Station " << stations[i].getName() << " "
 					<< stations[i].inStock(PASS_STUDENT) << " "
 					<< stations[i].inStock(PASS_ADULT)
 					<< ":\n";
 				//stations[i].report();
+				*/
 			}
 		}
 	};
