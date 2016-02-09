@@ -14,13 +14,13 @@ namespace w3
 		void setSafeEmpty();
 	public:
 		Text();
-		Text(char* fileName);
+		Text(char * fileName);
 
 		Text(const Text& from);
 		Text& operator=(const Text& from);
 
 		Text(Text&&);
-		Text& operator=(Text&& from);
+		Text&& operator=(Text&& from);
 
 
 		~Text();

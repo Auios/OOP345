@@ -27,7 +27,7 @@ public:
 	const V& value(int i) const
 	{
 		//return v[i];
-		return data[i].v
+		return data[i].v;
 	
 	}
 	KVList& add(const K& kk, const V& vv)
@@ -35,7 +35,7 @@ public:
 		if (count < N)
 		{
 			//k[count] = kk, v[count] = vv;
-			data[count].k = k, data[count.v = vv; ]
+			data[count].k = kk, data[count].v = vv;
 			count++;
 		}
 		return *this;

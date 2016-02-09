@@ -1,0 +1,126 @@
+Script started on Mon 08 Feb 2016 10:56:28 PM EST
+wcango@matrix:~/Adat/OOP345/w4> whoami
+cango
+cango@matrix:~/Adat/OOP345/w4> cat w4/cpp KVList.h 
+cat: w4/cpp: Not a directory
+//KVList.h
+template <class K, class V, int N>
+class KVList
+{
+private:
+	//K k[N];
+	//V v[N];
+	struct
+	{
+		K k;
+		V v;
+	} data[N];
+	size_t count;
+public:
+	KVList() : count(0) {}
+	size_t size() const
+	{
+		return count;
+	}
+
+	const K& key(int i) const
+	{
+		//return k[i];
+		return data[i].k;
+	}
+
+	const V& value(int i) const
+	{
+		//return v[i];
+		return data[i].v;
+	
+	}
+	KVList& add(const K& kk, const V& vv)
+	{
+		if (count < N)
+		{
+			//k[count] = kk, v[count] = vv;
+			data[count].k = kk, data[count].v = vv;
+			count++;
+		}
+		return *this;
+	}
+
+	int find(const K& kk) const
+	{
+		//Returns the index of the first element in the list with a key equal to k - defaults to 0
+		for (int i = 0; i < count; i++)
+		{
+			//if (kk == k[i]) return i;
+			if (kk == data[i].k) return i;
+		}
+		return 0;
+	}
+
+	KVList& replace(int i, const K& kk, const V& vv)
+	{
+		//Replaces element i in the list with the key and value received and returns a reference to the current object
+		if (i >= 0 && i < count)
+		{
+			//k[i] = kk, v[i] = vv;
+			data[i].k = kk, data[i].v = vv;
+		}
+		return *this;
+	}
+};cango@matrix:~/Adat/OOP345/w4> g++ 0[K-o w4 w4.cpp
+cango@matrix:~/Adat/OOP345/w4> w4
+
+Inventory
+=========
+Product : Pizza
+Price : 4.49
+Product : Pierogi
+Price : 2.56
+Product : Potato Chips
+Price : 2.29
+Product : Black Tea
+Price : 4.49
+Product : Green Tea
+Price : 3.46
+Product : Fruit Tea
+Price : 2.29
+Product : quit
+
+Price List
+----------
+        Pizza : 4.49
+      Pierogi : 2.56
+ Potato Chips : 2.29
+    Black Tea : 4.49
+    Green Tea : 3.46
+
+Corrections
+-----------
+Product : Black Tea
+Price : 5.5 29
+Product : quit
+
+Price List
+----------
+        Pizza : 4.49
+      Pierogi : 2.56
+ Potato Chips : 2.29
+    Black Tea : 5.29
+    Green Tea : 3.46
+
+Glossary
+========
+Key : CPU
+Definition : central pre ocessing unit
+Key : arithmetic            ALU
+Definition : arithmetc ic logic unit
+Key : quit
+
+Entries
+-------
+  CPU : central processing unit
+  ALU : arithmetic logic unit
+cango@matrix:~/Adat/OOP345/w4> exit
+exit
+
+Script done on Mon 08 Feb 2016 10:57:48 PM EST

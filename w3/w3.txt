@@ -1,0 +1,210 @@
+Script started on Mon 08 Feb 2016 10:43:24 PM EST
+whcango@matrix:~/Adat/OOP345/w3> whoami
+cango
+cango@matrix:~/Adat/OOP345/w3> cat w3.co[Kpp Text.h Text.cpp
+// Workshop 3 - Copy and Move Semantics
+// w3.cpp
+
+#include <iostream>
+#include <iomanip>
+#include <utility>
+#include <ctime>
+#include "Text.h"
+#define TIME(start, end) double((end) - (start)) / CLOCKS_PER_SEC
+
+int main(int argc, char* argv[]) {
+	if (argc == 1) {
+		std::cerr << argv[0] << ": missing file operand\n";
+		return 1;
+	}
+	else if (argc != 2) {
+		std::cerr << argv[0] << ": too many arguments\n";
+		return 2;
+	}
+	std::clock_t cs, ce;
+	{
+		std::cout << std::fixed << std::setprecision(3);
+		cs = std::clock();
+		w3::Text a;
+		ce = std::clock();
+		std::cout << "Constructor      " << TIME(cs, ce) << " seconds";
+		std::cout << " - a.size = " << a.size() << std::endl;
+
+		cs = std::clock();
+		w3::Text b(argv[1]);
+		ce = std::clock();
+		std::cout << "Constructor      " << TIME(cs, ce) << " seconds";
+		std::cout << " - b.size = " << b.size() << std::endl;
+
+		cs = std::clock();
+		a = b;
+		ce = std::clock();
+		std::cout << "Copy Assignment  " << TIME(cs, ce) << " seconds";
+		std::cout << " - a.size = " << a.size() << std::endl;
+
+		cs = std::clock();
+		a = std::move(b);
+		ce = std::clock();
+		std::cout << "Move Assignment  " << TIME(cs, ce) << " seconds";
+		std::cout << " - a.size = " << a.size() << std::endl;
+
+		cs = std::clock();
+		w3::Text c = a;
+		ce = std::clock();
+		std::cout << "Copy Constructor " << TIME(cs, ce) << " seconds";
+		std::cout << " - c.size = " << c.size() << std::endl;
+
+		cs = std::clock();
+		w3::Text d = std::move(a);
+		ce = std::clock();
+		std::cout << "Move Constructor " << TIME(cs, ce) << " seconds";
+		std::cout << " - d.size = " << d.size() << std::endl;
+
+		cs = std::clock();
+	}
+	ce = std::clock();
+	std::cout << "Destructor       " << TIME(cs, ce) << " seconds\n";
+}#pragma once
+#include <string>
+#include <fstream>
+#include <iostream>
+
+namespace w3
+{
+	class Text
+	{
+	private:
+		int lines;
+		std::string * txt;
+
+		void setSafeEmpty();
+	public:
+		Text();
+		Text(char * fileName);
+
+		Text(const Text& from);
+		Text& operator=(const Text& from);
+
+		Text(Text&&);
+		Text&& operator=(Text&& from);
+
+
+		~Text();
+
+		size_t size() const;
+	};
+}#include "Text.h"
+
+namespace w3
+{
+	Text::Text()
+	{
+		setSafeEmpty();
+	}
+
+	Text::Text(char * fileName)
+	{
+		std::string buffer;
+
+		setSafeEmpty();
+
+		//Get number of lines
+		std::ifstream ifs(fileName);
+		while(std::getline(ifs,buffer))
+		{
+			++lines;
+		}
+		ifs.close();
+		txt = new std::string[lines];
+		ifs.open(fileName);
+		for(int i=0; i<lines; i++)
+		{
+			std::getline(ifs,txt[i]);
+		}
+		ifs.close();
+	}
+
+	Text::Text(const Text& from)
+	{
+		setSafeEmpty();
+	}
+
+	Text& Text::operator=(const Text& from)
+	{
+		if (this != &from)
+		{
+			delete[] txt;
+			if (from.txt != 0)
+			{
+				txt = new std::string[from.lines];
+				lines = from.lines;
+				for (size_t i = 0; i < lines; i++)
+				{
+					txt[i] = from.txt[i];
+				}
+			}
+			else
+			{
+				txt = 0;
+				lines = 0;
+			}
+		}
+		return *this;
+	}
+
+	Text::Text(Text&& rhs)
+	{
+		txt = 0;
+		*this = std::move(rhs);
+	}
+
+	Text&& Text::operator= (Text&& rhs)
+	{
+		if (this != &rhs)
+		{
+			if (txt)
+				delete[] txt;
+			txt = rhs.txt;
+			lines = rhs.lines;
+
+			rhs.lines = 0;
+			rhs.txt = 0;
+		}
+		else
+		{
+			std::cout << "Move operator called itself\n";
+		}
+		return std::move(*this);
+	}
+
+	Text::~Text()
+	{
+		if(txt)
+		{
+			delete[] txt;
+		}
+	}
+
+	size_t Text::size() const
+	{
+		return lines;
+	}
+
+	void Text::setSafeEmpty()
+	{
+		lines = 0;
+		txt = 0;
+	}
+}cango@matrix:~/Adat/OOP345/w3> g++ w[K[K -o w3 -std=c++0x w3.cpp Text.cpp
+cango@matrix:~/Adat/OOP345/w3> w3 gutenberg_shakespeare [K
+Constructor      0.000 seconds - a.size = 0
+Constructor      0.120 seconds - b.size = 124456
+Copy Assignment  0.000 seconds - a.size = 124456
+Move Assignment  0.010 seconds - a.size = 124456
+Copy Constructor 0.000 seconds - c.size = 0
+Move Constructor 0.000 seconds - d.size = 124456
+Destructor       0.010 seconds
+cango@matrix:~/Adat/OOP345/w3> exit
+exit
+
+Script done on Mon 08 Feb 2016 10:44:12 PM EST
