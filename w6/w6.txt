@@ -1,0 +1,139 @@
+Script started on Fri 19 Feb 2016 02:38:58 PM EST
+wcango@matrix:~/Adat/OOP345/w6> whoami
+cango
+cango@matrix:~/Adat/OOP345/w6> cat w6.cpp g[KGrades.h
+// Workshop 6 - Lambda Expression
+// w6.cpp
+
+#include <iostream>
+#include "Grades.h"
+
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		std::cerr << argv[0] <<
+			": incorrect number of arguments\n";
+		std::cerr << "Usage: " << argv[0] << " file_name\n";
+		return 1;
+	}
+
+	try
+	{
+		Grades grades(argv[1]);
+		// define the lambda expression for letter
+
+		std::function < std::string(double mark) > letter;
+
+		letter = [](double m) -> std::string
+		{
+			std::string ret;
+			if (m >= 90) ret = "A+";
+			else if (m >= 80) ret = "A";
+			else if (m >= 75) ret = "B+";
+			else if (m >= 70) ret = "B";
+			else if (m >= 65) ret = "C+";
+			else if (m >= 60) ret = "C";
+			else if (m >= 55) ret = "D+";
+			else if (m >= 50) ret = "D";
+			else ret = "F";
+
+			return ret;
+		};
+		grades.displayGrades(std::cout, letter);
+
+	}
+	catch (std::string& e)
+	{
+		std::cerr << "It threw: '" << e << "'\n";
+	}
+
+	std::cout << "Press any key to continue ... ";
+	std::cin.get();
+}#pragma once
+
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <functional>
+
+class Grades
+{
+private:
+	size_t count;
+	struct studentEntry
+	{
+		double studentMark;
+		std::string studentNumber;
+	} *studentTable;
+
+public:
+	Grades() : count(0){}
+
+	Grades(const char* filename) : count(0)
+	{
+		std::fstream is(filename);
+		if (is.is_open())
+		{
+			std::string line;
+			while (getline(is, line))
+			{
+				count++;
+			}
+
+			//Reset the file to read from the beginning
+			is.clear(); //Clear end of file condition
+			is.seekg(0); //Put cursor back to start of file
+
+			studentTable = new studentEntry[count];
+
+			
+			for (size_t i = 0; i < count; i++)
+			{
+				is >> studentTable[i].studentNumber;
+				is >> studentTable[i].studentMark;
+			}
+			/*
+			for (size_t i = 0; i < count; i++)
+			{
+				std::cout << studentTable[i].studentNumber << " "
+					<< studentTable[i].studentMark
+					<< "\n";
+			}
+
+
+			std::cout << "file " << filename << " has " << count << " lines.\n";
+			*/
+
+			is.close();
+		}
+		else
+		{
+			throw std::string("Grade(") + filename + ") - cannot open file\n";
+		}
+	}
+
+	void displayGrades(std::ostream& os, std::function < std::string(double mark) > letter) const
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			os
+				<< studentTable[i].studentNumber << " "
+				<< studentTable[i].studentMark << " "
+				<< letter(studentTable[i].studentMark) << "\n";
+		}
+	}
+};cango@matrix:~/Adat/OOP345/w6> g++ -std="c++0x" -o w6 w6.cpp
+cango@matrix:~/Adat/OOP345/w6> w6 grades.dat
+1022342 67.4 C+
+1024567 73.5 B
+2031456 79.3 B+
+6032144 53.5 D
+1053250 92.1 A+
+3026721 86.5 A
+7420134 62.3 C
+9762314 58.7 D+
+6521045 34.6 F
+Press any key to continue ... exit    
+cango@matrix:~/Adat/OOP345/w6> exit
+exit
+
+Script done on Fri 19 Feb 2016 02:39:43 PM EST
