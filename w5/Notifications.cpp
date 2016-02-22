@@ -8,7 +8,7 @@ namespace w5
         *this = rhs;
     }
     
-    Notifications::Notifications& operator=(const Notifications& rhs)
+    Notifications& Notifications::operator=(const Notifications& rhs)
     {
         if (this != &rhs)
         {
@@ -41,7 +41,7 @@ namespace w5
         *this = std::move(rhs);
     }
     
-    Notifications::Notifications&& operator=(Notifications&& rhs)
+    Notifications&& Notifications::operator=(Notifications&& rhs)
     {
         if (this != &rhs)
         {
@@ -77,7 +77,7 @@ namespace w5
     
     void Notifications::display(std::ostream& os) //Inster the Message objects to the os output stream
     {
-        os << "We have " << count << " tweets.\n";
+        //os << "We have " << count << " tweets.\n";
 
         for (int i = 0; i < count; i++)
         {

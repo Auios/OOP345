@@ -11,10 +11,7 @@ namespace w5
 	private:
 		std::string name, reply, tweet;
 	public:
-		Message()
-		{
-
-		}
+		Message(){}
 		Message(std::ifstream& in, char c);
 		bool empty();
 		void display(std::ostream& os);

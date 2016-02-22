@@ -10,9 +10,11 @@ namespace w5
 
 	void Message::display(std::ostream& os)
 	{
-		os << "Name:  " << name << "\n";
-		os << "Reply: " << reply << "\n";
-		os << "Tweet: " << tweet << "\n";
+        /*
+		os << " Name  : " << name << "\n";
+		os << " Reply : " << reply << "\n";
+		os << " Tweet : " << tweet << "\n";
+        */
 	}
 
 	Message::Message(std::ifstream& in, char c)
@@ -21,7 +23,7 @@ namespace w5
 		getline(in, line, c);
 		if (in.eof())
 		{
-			std::cout << "EOF\n";
+			//std::cout << "EOF\n";
 			return;
 		}
 
@@ -31,7 +33,7 @@ namespace w5
 			line.erase(line.begin() + cr);
 		}
 
-		std::cout << "read -->" << line << "<==\n";
+		//std::cout << "read -->" << line << "<==\n";
 
 		int index = 0;
 
@@ -40,12 +42,14 @@ namespace w5
 			name += line[index];
 			index++;
 		}
-
+        
+        std::cout << "Message\n";
 		//Print name
-		std::cout << "Name: " << name << "\n";
+		std::cout << " Name  : " << name << "\n";
 
 		if (index == line.size())
 		{
+            std::cout << "\n";
 			return;
 		}
 
@@ -63,12 +67,13 @@ namespace w5
 
 			if (!reply.empty())
 			{
-				std::cout << "Reply: " << reply << "\n";
+				std::cout << " Reply : " << reply << "\n";
 			}
 
 			if (index == line.size())
 			{
 				//EOL
+                std::cout << "\n";
 				return;
 			}
 
@@ -77,8 +82,14 @@ namespace w5
 			while (index < line.size())
 			{
 				tweet += line[index];
+                index++;
 			}
 		}
-		std::cout << "Tweet: " << tweet << "\n";
+        
+        if (!tweet.empty())
+        {
+            std::cout << " Tweet : " << tweet << "\n";
+        }
+        std::cout << "\n";
 	}
 }
