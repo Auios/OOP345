@@ -10,11 +10,9 @@ namespace w5
 
 	void Message::display(std::ostream& os)
 	{
-        /*
 		os << " Name  : " << name << "\n";
 		os << " Reply : " << reply << "\n";
 		os << " Tweet : " << tweet << "\n";
-        */
 	}
 
 	Message::Message(std::ifstream& in, char c)
