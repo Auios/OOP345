@@ -3,6 +3,7 @@
 
 // Workshop 7 - STL Containers
 // iProduct.h
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -13,22 +14,10 @@ namespace w7
 	{
 	public:
 		virtual double getCharge() const = 0;
-		virtual void display(std::ostream&) const = 0;
+		virtual void display(std::ostream&) = 0;
+		virtual ~iProduct(){};
 	};
 
-	class Product:public iProduct
-	{
-
-	};
-
-	class TaxableProduct :public iProduct
-	{
-
-	};
-
-	std::ostream& operator<<(std::ostream&, const iProduct&);
+	std::ostream& operator<<(std::ostream&, iProduct&);
 	iProduct* readProduct(std::ifstream&);
 }
-
-
-#endif

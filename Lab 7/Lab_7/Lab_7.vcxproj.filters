@@ -29,20 +29,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="iProduct.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TaxableProduct.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="w7.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sales.cpp">
-      <Filter>Resource Files</Filter>
+    <ClCompile Include="TaxableProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="iProduct.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Product.cpp">
-      <Filter>Resource Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sales.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

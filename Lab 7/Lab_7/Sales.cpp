@@ -27,7 +27,7 @@ namespace w7{
 		}
 		file.close();
 	}
-	void Sales::display(std::ostream& os) const{
+	void Sales::display(std::ostream& os) const{;
 		double total = 0;
 		os << std::setw(10) << "Product No"
 			<< std::setw(10) << std::right << "Cost"
@@ -44,6 +44,4 @@ namespace w7{
 	Sales::~Sales(){
 		Products.clear();
 	}
-
-
 }

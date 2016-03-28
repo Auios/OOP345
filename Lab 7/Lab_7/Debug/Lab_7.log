@@ -1,19 +1,23 @@
-﻿Build started 11/12/2015 5:11:14 PM.
-     1>Project "A:\School\BTP 305\Lab_7\Lab_7\Lab_7.vcxproj" on node 2 (Build target(s)).
+﻿Build started 3/27/2016 6:53:14 PM.
+     1>Project "C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Lab_7\Lab_7.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         A:\Personal Programs\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Sales.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Sales.cpp iProduct.cpp w7.cpp
+         w7.cpp
+         iProduct.cpp
+     1>c:\users\lonea\documents\github\oop345\lab 7\lab_7\iproduct.cpp(23): warning C4018: '<' : signed/unsigned mismatch
          Sales.cpp
-     1>a:\school\btp 305\lab_7\lab_7\sales.cpp(6): warning C4101: 'product' : unreferenced local variable
-     1>a:\school\btp 305\lab_7\lab_7\sales.cpp(39): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\lonea\documents\github\oop345\lab 7\lab_7\sales.cpp(6): warning C4101: 'product' : unreferenced local variable
+     1>c:\users\lonea\documents\github\oop345\lab 7\lab_7\sales.cpp(39): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
        Link:
-         A:\Personal Programs\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"A:\School\BTP 305\Lab_7\Debug\Lab_7.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"A:\School\BTP 305\Lab_7\Debug\Lab_7.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"A:\School\BTP 305\Lab_7\Debug\Lab_7.lib" /MACHINE:X86 Debug\iProduct.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Debug\Lab_7.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Debug\Lab_7.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Debug\Lab_7.lib" /MACHINE:X86 Debug\iProduct.obj
          Debug\Product.obj
          Debug\Sales.obj
          Debug\TaxableProduct.obj
          Debug\w7.obj
-         Lab_7.vcxproj -> A:\School\BTP 305\Lab_7\Debug\Lab_7.exe
-     1>Done Building Project "A:\School\BTP 305\Lab_7\Lab_7\Lab_7.vcxproj" (Build target(s)).
+         Lab_7.vcxproj -> C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Debug\Lab_7.exe
+     1>Done Building Project "C:\Users\LoneA\Documents\GitHub\OOP345\Lab 7\Lab_7\Lab_7.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.48
+Time Elapsed 00:00:02.37

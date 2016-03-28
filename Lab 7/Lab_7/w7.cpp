@@ -1,4 +1,4 @@
-// Workshop 8 - STL Containers
+// Workshop 7 - STL Containers
 // w7.cpp
 
 #include <iostream>
