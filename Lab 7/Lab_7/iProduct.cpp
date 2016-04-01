@@ -3,13 +3,17 @@
 #include "TaxableProduct.h"
 #include <string>
 #include <vector>
-namespace w7{
-	std::ostream& operator<<(std::ostream& os, iProduct& product){
+
+namespace w7
+{
+	std::ostream& operator<<(std::ostream& os, iProduct& product)
+	{
 		product.display(os);
 		return os;
 	}
 
-	iProduct* readProduct(std::ifstream& in){
+	iProduct* readProduct(std::ifstream& in)
+	{
 		std::vector<std::string> token;
 		std::string line;
 		long ID;
@@ -28,15 +32,19 @@ namespace w7{
 			token.push_back(line.substr(start, end - start));
 			start = end + 1;
 		}
+
 		ID = std::stol(token[0]);
 		price = std::stod(token[1]);
+
 		if (token.size() >2)
+		{
 			tax = token[2].c_str()[0];
+		}
 		if (token.size() == 2){
 			return new Product(ID,price);
 		}
-		
-		if (tax == 'H' || tax == 'P'){
+		if (tax == 'H' || tax == 'P')
+		{
 			return new TaxableProduct(ID, price, tax);
 		}
 		throw "File corrupted";

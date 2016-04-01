@@ -1,8 +1,9 @@
 #include "TaxableProduct.h"
 namespace w7{
-	const float TaxableProduct::tax[2] = { 0.13, 0.08 };
+	const float TaxableProduct::tax[2] = {0.13, 0.08};
 
-	double TaxableProduct::getCharge() const{
+	double TaxableProduct::getCharge() const
+	{
 		double baseCharge = Product::getCharge();
 		float t = 1;
 		if (taxType == 'H')
@@ -13,7 +14,8 @@ namespace w7{
 
 	}
 
-	void TaxableProduct::display(std::ostream& os){
+	void TaxableProduct::display(std::ostream& os)
+	{
 		Product::display(os);
 		
 		os << " ";

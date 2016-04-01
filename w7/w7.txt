@@ -1,0 +1,266 @@
+Script started on Thu 31 Mar 2016 06:42:55 PM EDT
+cango@matrix:~/Adat/OOP345/w7> whoami
+cango
+cango@matrix:~/Adat/OOP345/w7> whoami[2Pexitw7 Sales.datg11 -o w7 w7.cpp Product.cpp Sale.cpp iProduct.cpp TaxableProduct.cpp[K[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[24Pcat *.h *.cpp[7Pwhoamicat *.h *.cpp
+#ifndef PRODUCT_H
+#define PRODUCT_H
+#include "iProduct.h"
+#include <iomanip>
+namespace w7
+{
+	class Product : public iProduct
+	{
+	private:
+		long pID;
+		double charge;
+	public:
+		Product(long p, double c): pID(p), charge(c) {}
+		double getCharge() const;
+		void display(std::ostream& os);
+		~Product(){}
+	};
+
+}
+
+#endif#pragma once
+#include <vector>
+#include <string>
+#include "Product.h"
+#include "TaxableProduct.h"
+#include <iomanip>
+
+namespace w7
+{
+	class Sale
+	{
+	private:
+		std::vector<iProduct*> Products;
+	public:
+		Sale(const char* filename);
+		void display(std::ostream& os) const;
+		~Sale();
+	};
+}#ifndef TAXABLE_PRODUCT_H
+#define TAXABLE_PRODUCT_H
+#include "Product.h"
+#include <iostream>
+namespace w7
+{
+
+	class TaxableProduct: public Product
+	{
+	private:
+		char taxType;
+	public:
+		static const float tax[2];
+		TaxableProduct(long p, double c, char t) : Product(p, c), taxType(t) {}
+		double getCharge() const;
+		void display(std::ostream& os);
+		~TaxableProduct(){};
+	};
+}
+#endif#pragma once
+//Workshop 7 - STL Containers
+// iProduct.h
+
+#include <iostream>
+#include <fstream>
+
+namespace w7
+{
+
+	class iProduct
+	{
+	private:
+	public:
+		virtual double getCharge() const = 0;
+		virtual void display(std::ostream&) = 0;
+		virtual ~iProduct(){};
+	};
+
+	std::ostream& operator<<(std::ostream&, iProduct&);
+	iProduct* readProduct(std::ifstream&);
+}#include "Product.h"
+
+namespace w7{
+	double Product::getCharge() const
+	{
+		return charge;
+	}
+
+	void Product::display(std::ostream& os)
+	{
+		os << std::setw(10) << std::right << pID << std::setw(10) << std::right << charge;
+	}
+}#include "Sale.h"
+
+namespace w7
+{
+	Sale::Sale(const char* filename)
+	{
+		std::ifstream file(filename);
+		iProduct* product;
+
+		if (!file)
+		{
+			return;
+		}
+		while (file.good())
+		{
+			try
+			{
+				Products.push_back(readProduct(file));
+			}
+			catch (const char* message)
+			{
+				std::cerr << message << std::endl;
+
+				for (auto p = Products.begin(); p != Products.end(); p++)
+				{
+					delete *p;
+				}
+				Products.clear();
+				file.close();
+				return;
+			}
+		}
+		file.close();
+	}
+	void Sale::display(std::ostream& os) const
+	{
+		double total = 0;
+		os << std::setw(10) << "Product No"
+			<< std::setw(10) << std::right << "Cost"
+			<< std::left << " Taxable" << std::endl;
+		os << std::fixed << std::setprecision(2);
+		for (auto product = Products.begin(); product != Products.end(); product++)
+		{
+			os << **product << std::endl;
+		}
+		for (int i = 0; i < Products.size(); i++)
+		{
+			total += Products[i]->getCharge();
+		}
+		os << std::setw(10) << std::right << "Total" <<std::setw(10) << total << std::endl;
+	}
+	Sale::~Sale()
+	{
+		Products.clear();
+	}
+}#include "TaxableProduct.h"
+namespace w7{
+	const float TaxableProduct::tax[2] = {0.13, 0.08};
+
+	double TaxableProduct::getCharge() const
+	{
+		double baseCharge = Product::getCharge();
+		float t = 1;
+		if (taxType == 'H')
+			t += tax[0];
+		else
+			t += tax[1];
+		return t*baseCharge;
+
+	}
+
+	void TaxableProduct::display(std::ostream& os)
+	{
+		Product::display(os);
+		
+		os << " ";
+		if (taxType == 'H')
+			os << "HST";
+		else
+			os << "PST";
+	}
+}#include "iProduct.h"
+#include "Product.h"
+#include "TaxableProduct.h"
+#include <string>
+#include <vector>
+
+namespace w7
+{
+	std::ostream& operator<<(std::ostream& os, iProduct& product)
+	{
+		product.display(os);
+		return os;
+	}
+
+	iProduct* readProduct(std::ifstream& in)
+	{
+		std::vector<std::string> token;
+		std::string line;
+		long ID;
+		double price;
+		char tax;
+		std::getline(in, line);
+		size_t length = line.size();
+		int start = 0, end = 0;
+
+		size_t pos = line.find(' ');
+		while (start < length){
+			end = line.find(' ', start);
+			if (end == std::string::npos){
+				end = length;
+			}
+			token.push_back(line.substr(start, end - start));
+			start = end + 1;
+		}
+
+		ID = std::stol(token[0]);
+		price = std::stod(token[1]);
+
+		if (token.size() >2)
+		{
+			tax = token[2].c_str()[0];
+		}
+		if (token.size() == 2){
+			return new Product(ID,price);
+		}
+		if (tax == 'H' || tax == 'P')
+		{
+			return new TaxableProduct(ID, price, tax);
+		}
+		throw "File corrupted";
+
+	}
+}// Workshop 7 - STL Containers
+// w7.cpp
+
+#include <iostream>
+#include <string>
+#include "Sale.h"
+
+int main(int argc, char** argv)
+{
+	if (argc != 2)
+	{
+		std::cerr << argv[0] << ": incorrect number of arguments\n";
+		std::cerr << "usage: " << argv[0] << " file_name\n";
+		return 1;
+	}
+
+	w7::Sale sale(argv[1]);
+	sale.display(std::cout);
+
+	std::cout << "\nPress any key to contiue ...";
+	std::cin.get();
+
+	return 0;
+}cango@matrix:~/Adat/OOP345/w7> cat *.h *.cpp[7Pwhoami[2Pexitw7 Sales.datg11 -o w7 w7.cpp Product.cpp Sale.cpp iProduct.cpp TaxableProduct.cpp
+cango@matrix:~/Adat/OOP345/w7> g11 -o w7 w7.cpp Product.cpp Sale.cpp iProduct.cpp TaxableProduct.cpp[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ccat *.h *.cpp[K[7Pwhoami[2Pexitw7 Sales.dat
+Product No      Cost Taxable
+     10012     34.56
+     10023     45.67 HST
+     10234     12.32 PST
+     10056     67.54
+     10029     54.12 HST
+     10034     96.30
+     Total    324.47
+
+Press any key to contiue ...
+cango@matrix:~/Adat/OOP345/w7> exit
+exit
+
+Script done on Thu 31 Mar 2016 06:43:12 PM EDT

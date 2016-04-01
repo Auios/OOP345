@@ -2,9 +2,12 @@
 #define TAXABLE_PRODUCT_H
 #include "Product.h"
 #include <iostream>
-namespace w7{
+namespace w7
+{
 
-	class TaxableProduct: public Product{
+	class TaxableProduct: public Product
+	{
+	private:
 		char taxType;
 	public:
 		static const float tax[2];

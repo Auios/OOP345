@@ -24,7 +24,7 @@
     <ClInclude Include="TaxableProduct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sales.h">
+    <ClInclude Include="Sale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClCompile Include="Product.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sales.cpp">
+    <ClCompile Include="Sale.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

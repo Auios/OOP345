@@ -2,8 +2,11 @@
 #define PRODUCT_H
 #include "iProduct.h"
 #include <iomanip>
-namespace w7{
-	class Product : public iProduct{
+namespace w7
+{
+	class Product : public iProduct
+	{
+	private:
 		long pID;
 		double charge;
 	public:

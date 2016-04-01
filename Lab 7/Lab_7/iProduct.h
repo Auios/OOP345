@@ -1,15 +1,16 @@
-#ifndef I_PRODUCT_H
-#define I_PRODUCT_H
-
+#pragma once
 //Workshop 7 - STL Containers
 // iProduct.h
 
 #include <iostream>
 #include <fstream>
 
-namespace w7{
+namespace w7
+{
 
-	class iProduct{
+	class iProduct
+	{
+	private:
 	public:
 		virtual double getCharge() const = 0;
 		virtual void display(std::ostream&) = 0;
@@ -19,8 +20,3 @@ namespace w7{
 	std::ostream& operator<<(std::ostream&, iProduct&);
 	iProduct* readProduct(std::ifstream&);
 }
-
-
-
-
-#endif
