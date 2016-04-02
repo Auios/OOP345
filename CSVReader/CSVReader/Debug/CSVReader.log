@@ -1,0 +1,3 @@
+﻿  main.cpp
+e:\oop345\csvreader\csvreader\main.cpp(43): warning C4018: '<' : signed/unsigned mismatch
+  CSVReader.vcxproj -> E:\OOP345\CSVReader\Debug\CSVReader.exe

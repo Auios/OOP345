@@ -2,10 +2,11 @@
 
 namespace w7
 {
-	Sale::Sale(const char* filename)
+	Sale::Sale(const char *fileName)
 	{
-		std::ifstream file(filename);
-		iProduct* product;
+		std::ifstream file(fileName);
+		iProduct *products;
+		std::vector<iProduct> Products;
 
 		if (!file)
 		{
@@ -17,7 +18,7 @@ namespace w7
 			{
 				Products.push_back(readProduct(file));
 			}
-			catch (const char* message)
+			catch (const char *message)
 			{
 				std::cerr << message << std::endl;
 
@@ -32,23 +33,28 @@ namespace w7
 		}
 		file.close();
 	}
-	void Sale::display(std::ostream& os) const
+
+	void Sale::display(std::ostream &os) const
 	{
 		double total = 0;
 		os << std::setw(10) << "Product No"
 			<< std::setw(10) << std::right << "Cost"
-			<< std::left << " Taxable" << std::endl;
+			<< std::left << " Taxable\n";
 		os << std::fixed << std::setprecision(2);
+
 		for (auto product = Products.begin(); product != Products.end(); product++)
 		{
-			os << **product << std::endl;
+			os << **product << "\n";
 		}
+
 		for (int i = 0; i < Products.size(); i++)
 		{
 			total += Products[i]->getCharge();
 		}
-		os << std::setw(10) << std::right << "Total" <<std::setw(10) << total << std::endl;
+		
+		os << std::setw(10) << std::right << "Total" << std::setw(10) << total << "\n";
 	}
+	
 	Sale::~Sale()
 	{
 		Products.clear();

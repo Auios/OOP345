@@ -1,7 +1,8 @@
-#ifndef PRODUCT_H
-#define PRODUCT_H
+#pragma once
+
 #include "iProduct.h"
 #include <iomanip>
+
 namespace w7
 {
 	class Product : public iProduct
@@ -9,13 +10,11 @@ namespace w7
 	private:
 		long pID;
 		double charge;
+
 	public:
-		Product(long p, double c): pID(p), charge(c) {}
+		Product(long p, double c) : pID(p), charge(c){}
 		double getCharge() const;
-		void display(std::ostream& os);
+		void display(std::ostream &os);
 		~Product(){}
 	};
-
 }
-
-#endif

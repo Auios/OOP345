@@ -1,0 +1,323 @@
+Script started on Fri 01 Apr 2016 01:47:58 PM EDT
+cango@matrix:~/Adat/OOP345/w10> whoami
+cango
+Script started on Fri 01 Apr 2016 01:49:08 PM EDT
+cango@matrix:~/Adat/OOP345/w10> cat SecureData.cpp
+// Workshop 10 - Multi-Threading
+
+// SecureData.cpp
+
+
+
+#include <iostream>
+
+#include <fstream>
+
+#include <thread>
+
+#include <string>
+
+#include "SecureData.h"
+
+
+
+namespace w10 {
+
+
+
+	void converter(char* t, char key, int n, const Cryptor& c) {
+
+		for (int i = 0; i < n; i++)
+
+			t[i] = c(t[i], key);
+
+	}
+
+
+
+	SecureData::SecureData(const char* file, char key) {
+
+		// open text file
+
+		std::fstream input(file, std::ios::in);
+
+		if (!input)
+
+			throw std::string("\n***Failed to open file ") +
+
+			std::string(file) + std::string(" ***\n");
+
+
+
+		// copy from file into memory
+
+		nbytes = 0;
+
+		input >> std::noskipws;
+
+		while (input.good()) {
+
+			char c;
+
+			input >> c;
+
+			nbytes++;
+
+		}
+
+		nbytes--;
+
+		input.clear();
+
+		input.seekg(0, std::ios::beg);
+
+		text = new char[nbytes + 1];
+
+
+
+		int i = 0;
+
+		while (input.good())
+
+			input >> text[i++];
+
+		text[--i] = '\0';
+
+		std::cout << "\n" << nbytes << " bytes copied from text "
+
+			<< file << " into memory (null byte added)\n";
+
+		encoded = false;
+
+
+
+		// encode using key
+
+		code(key);
+
+		std::cout << "Data encrypted in memory\n";
+
+	}
+
+
+
+	SecureData::~SecureData() {
+
+		delete[] text;
+
+	}
+
+
+
+	void SecureData::display(std::ostream& os) const {
+
+		if (text && !encoded)
+
+			os << text << std::endl;
+
+		else if (encoded)
+
+			throw std::string("\n***Data is encoded***\n");
+
+		else
+
+			throw std::string("\n***No data stored***\n");
+
+	}
+
+
+
+	void SecureData::code(char key) {
+
+		//converter(text, key, nbytes, Cryptor());
+
+
+
+		std::thread t1(std::bind(converter, text, key, nbytes / 2, Cryptor()));
+
+		std::thread t2(std::bind(converter, text + nbytes / 2, key, nbytes - (nbytes / 2), Cryptor()));
+
+
+
+		t1.join();
+
+		t2.join();
+
+
+
+		encoded = !encoded;
+
+	}
+
+
+
+	void SecureData::backup(const char* file) {
+
+		if (!text)
+
+			throw std::string("\n***No data stored***\n");
+
+		else if (!encoded)
+
+			throw std::string("\n***Data is not encoded***\n");
+
+		else {
+
+			// open binary file
+
+			std::ofstream ofs(file, std::ios::binary | std::ios::trunc);
+
+			if (!ofs)
+
+			{
+
+				throw std::string("\n***Fuke could not be opened***\n");
+
+			}
+
+			// write binary file here
+
+
+
+			ofs.write(text, nbytes);
+
+			ofs.close();
+
+
+
+		}
+
+	}
+
+
+
+	void SecureData::restore(const char* file, char key) {
+
+		// open binary file
+
+		std::ifstream ifs(file, std::ios::binary);
+
+		if (!ifs)
+
+		{
+
+			throw std::string("\nFile not opened\n");
+
+		}
+
+
+
+		// allocate memory here
+
+
+
+		if (text)
+
+		{
+
+			delete[] text;
+
+		}
+
+		ifs.seekg(0, std::ios::end);
+
+		nbytes = (int) ifs.tellg();
+
+		text = new char[nbytes + 1];
+
+		// read binary file here
+
+
+
+		ifs.seekg(0, std::ios::beg);
+
+		ifs.read(text, nbytes);
+
+		text[nbytes] = '\0';
+
+		ifs.close();
+
+
+
+
+
+		std::cout << "\n" << nbytes + 1 << " bytes copied from binary file "
+
+			<< file << " into memory (null byte included)\n";
+
+		encoded = true;
+
+
+
+		// decode using key
+
+		code(key);
+
+		std::cout << "Data decrypted in memory\n\n";
+
+	}
+
+
+
+	std::ostream& operator<<(std::ostream& os, const SecureData& sd) {
+
+		sd.display(os);
+
+		return os;
+
+	}
+
+
+
+}cango@matrix:~/Adat/OOP345/w10> exit
+exit
+
+Script done on Fri 01 Apr 2016 01:49:14 PM EDT
+
+cango@matrix:~/Adat/OOP345/w10> g11 -lpthread -[K-o 2[Kw10 w10.p[Kcpp[Kp s[KSecureData.cpp encoded[K[K[K[K[K[K[K[K
+cango@matrix:~/Adat/OOP345/w10> e[Kw10 en[K[Kw10_text.dat encoded.dat %
+
+Command Line : w10 w10_text.dat encoded.dat % 
+
+952 bytes copied from text w10_text.dat into memory (null byte added)
+Data encrypted in memory
+
+953 bytes copied from binary file encoded.dat into memory (null byte included)
+Data decrypted in memory
+
+ Compound types are types that a programmer constructs from a language's
+
+ fundamental types and/or other compound types.  In C++11, compound types 
+
+ include pointers and references to existing types, enumerations of named 
+
+ constant values, arrays of objects of an existing type, classes and function
+
+ types.  C++11 clarified the difference between lvalues and rvalues and 
+
+ references to each, which helped simplify many of the facilities available
+
+ in the standard library.
+
+
+
+ This chapter describes the non-function types in detail.  The description 
+
+ includes a review of one-dimensional arrays in both static and dynamic memory
+
+ and shows how to allocate multi-dimensional arrays in both static and dynamic
+
+ memory.  The description of classes reviews class definitions, introduces
+
+ move-constructors and move-assignment operators and includes declarations of
+
+ special members such as bit fields, class variables and class functions.
+
+
+
+
+Press any key to continue ... 
+cango@matrix:~/Adat/OOP345/w10> exit
+exit
+
+Script done on Fri 01 Apr 2016 01:48:56 PM EDT

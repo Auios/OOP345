@@ -1,19 +1,19 @@
 #pragma once
+
+#include <iostream>
+#include <fstream>
 #include <vector>
-#include <string>
+#include "iProduct.h"
 #include "Product.h"
-#include "TaxableProduct.h"
-#include <iomanip>
 
 namespace w7
 {
 	class Sale
 	{
 	private:
-		std::vector<iProduct*> Products;
+
 	public:
-		Sale(const char* filename);
-		void display(std::ostream& os) const;
-		~Sale();
+		Sale(const char* f);
+		void display(std::ostream &os) const;
 	};
 }

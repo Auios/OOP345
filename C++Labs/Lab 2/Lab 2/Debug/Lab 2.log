@@ -1,0 +1,18 @@
+﻿Build started 9/28/2015 9:57:54 PM.
+     1>Project "A:\School\BTP 305\Lab 2\Lab 2\Lab 2.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         A:\Personal Programs\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Station.cpp Stations.cpp w2.cpp
+         w2.cpp
+         Stations.cpp
+         Station.cpp
+         Generating Code...
+       Link:
+         A:\Personal Programs\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"A:\School\BTP 305\Lab 2\Debug\Lab 2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"A:\School\BTP 305\Lab 2\Debug\Lab 2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"A:\School\BTP 305\Lab 2\Debug\Lab 2.lib" /MACHINE:X86 Debug\Station.obj
+         Debug\Stations.obj
+         Debug\w2.obj
+         Lab 2.vcxproj -> A:\School\BTP 305\Lab 2\Debug\Lab 2.exe
+     1>Done Building Project "A:\School\BTP 305\Lab 2\Lab 2\Lab 2.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.20

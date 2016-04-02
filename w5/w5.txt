@@ -1,0 +1,286 @@
+Script started on Mon 28 Mar 2016 02:47:08 PM EDT
+cango@matrix:~/Adat/OOP345/w5> whoami
+cango
+cango@matrix:~/Adat/OOP345/w5> cat w5.cpp Notifications.* Message.*
+// Workshop 5 - Containers
+// w5.cpp
+
+#include <iostream>
+#include <fstream>
+#include "Message.h"
+#include "Notifications.h"
+
+const char REC_DELIMITER = '\n';
+
+w5::Notifications collect(std::ifstream& in, char recDelim) {
+	w5::Notifications notifications;
+
+	do {
+		w5::Message message(in, recDelim);
+		if (!message.empty())
+			notifications += std::move(message);
+	} while (in);
+
+	return notifications;
+}
+
+int main(int argc, char* argv[]) {
+	if (argc == 1) {
+		std::cerr << argv[0] << ": missing file operand\n";
+		return 1;
+	}
+	else if (argc != 2) {
+		std::cerr << argv[0] << ": too many arguments\n";
+		return 2;
+	}
+	std::ifstream file(argv[1]);
+	if (!file) {
+		std::cerr << argv[0] << "\n: Failed to open " << argv[1] << "\n";
+		return 3;
+	}
+
+	std::cout << "\nNotifications\n=============\n\n";
+	w5::Notifications notifications = collect(file, REC_DELIMITER);
+
+	notifications.display(std::cout);
+
+	std::cout << "Press any key to continue ... ";
+	std::cin.get();
+}#include "Notifications.h"
+
+namespace w5
+{
+	Notifications::Notifications(const Notifications& rhs)
+	{
+		msgTable = 0;
+		*this = rhs;
+	}
+
+	Notifications& Notifications::operator=(const Notifications& rhs)
+	{
+		if (this != &rhs)
+		{
+			if (msgTable)
+			{
+				delete[] msgTable;
+
+				msgTable = 0;
+				count = 0;
+
+				if (rhs.msgTable)
+				{
+					count = rhs.count;
+					msgTable = new Message[MAX_TABLE_SIZE];
+
+					//Deep copy
+					for (int i = 0; i < count; i++)
+					{
+						msgTable[i] = rhs.msgTable[i];
+					}
+				}
+			}
+			return *this;
+		}
+	}
+
+	Notifications::Notifications(Notifications&& rhs)
+	{
+		msgTable = 0;
+		*this = std::move(rhs);
+	}
+
+	Notifications&& Notifications::operator=(Notifications&& rhs)
+	{
+		if (this != &rhs)
+		{
+			if (msgTable) delete[] msgTable;
+
+			msgTable = 0;
+			count = 0;
+
+			//Move pointers (Steal brains)
+			count = rhs.count;
+			msgTable = rhs.msgTable;
+
+			//Mark rhs as 'no brains' - a zombie
+			rhs.count = 0;
+			rhs.msgTable = 0;
+		}
+		return std::move(*this);
+	}
+
+	Notifications::~Notifications()
+	{
+		if (msgTable) delete [] msgTable;
+	}
+
+	void Notifications::operator+=(const Message& msg) //Add message to the set
+	{
+		if (count < MAX_TABLE_SIZE)
+		{
+			msgTable[count] = msg;
+			count++;
+		}
+	}
+
+	void Notifications::display(std::ostream& os) //Inster the Message objects to the os output stream
+	{
+		//os << "We have " << count << " tweets.\n";
+
+		for (int i = 0; i < count; i++)
+		{
+			msgTable[i].display(os);
+		}
+	}
+}#pragma once
+
+#include <iostream>
+#include "Message.h"
+
+namespace w5
+{
+	//Notifications manages the messages
+	class Notifications
+	{
+	private:
+		static const int MAX_TABLE_SIZE = 10;
+		Message* msgTable;
+		int count;
+
+	public:
+		Notifications() : count(0), msgTable(new Message[MAX_TABLE_SIZE]){}
+		Notifications(const Notifications& rhs);
+		Notifications& operator=(const Notifications& rhs);
+		Notifications(Notifications&& rhs);
+		Notifications&& operator=(Notifications&& rhs);
+		~Notifications();
+		void operator+=(const Message& msg); //Add message to the set
+		void display(std::ostream& os); //Inster the Message objects to the os output stream
+	};
+}#include "Message.h"
+
+namespace w5
+{
+
+	bool Message::empty()
+	{
+		return tweet.empty();
+	}
+
+	void Message::display(std::ostream& os)
+	{
+		//os << "Name:  " << name << "\n";
+		//os << "Reply: " << reply << "\n";
+		//os << "Tweet: " << tweet << "\n";
+	}
+
+	Message::Message(std::ifstream& in, char c)
+	{
+		std::string line;
+		getline(in, line, c);
+		if (in.eof())
+		{
+			//std::cout << "EOF\n";
+			return;
+		}
+
+		auto cr = line.find("\r");
+		if (cr != std::string::npos)
+		{
+			line.erase(line.begin() + cr);
+		}
+
+		//std::cout << "read -->" << line << "<==\n";
+		std::cout << "Message\n";
+
+		int index = 0;
+
+		while (index < line.size() && line[index] != ' ')
+		{
+			name += line[index];
+			index++;
+		}
+
+		//Print name
+		std::cout << "  User  : " << name << "\n";
+
+		if (index == line.size())
+		{
+			return;
+		}
+
+		index++; //Skip space
+
+		if(index < line.size() && line[index] == '@')
+		{
+			index++;
+
+			while(index < line.size() && line[index] != ' ')
+			{
+				reply += line[index];
+				index++;
+			}
+		}
+
+		if(!reply.empty())
+		{
+			std::cout << "  Reply : " << reply << "\n";
+		}
+
+		if(index == line.size())
+		{
+			//EOL
+			return;
+		}
+
+		while(index < line.size())
+		{
+			tweet += line[index];
+			index++;
+		}
+		std::cout << "  Tweet : " << tweet << "\n";
+	}
+}#pragma once
+
+#include <fstream>
+#include <iostream>
+#include <string>
+
+namespace w5
+{
+	class Message
+	{
+	private:
+		std::string name, reply, tweet;
+	public:
+		Message()
+		{
+
+		}
+		Message(std::ifstream& in, char c);
+		bool empty();
+		void display(std::ostream& os);
+	};
+}cango@matrix:~/Adat/OOP345/w5> Gg[K[Kg++ -w [K[Ko w5 -std=c++0x w.c[K[K[Kw5.cpp Notifications..[Kcpp Message.cpp
+cango@matrix:~/Adat/OOP345/w5> w5 text.txt
+
+Notifications
+=============
+
+Message
+  User  : jim
+  Tweet : Workshop 5 is cool
+Message
+  User  : harry
+  Reply : jim
+  Tweet :  working on workshop 5 now
+Message
+  User  : chris
+Message
+  User  : dave
+  Tweet : what the ^#$%!
+Press any key to continue ... 
+cango@matrix:~/Adat/OOP345/w5> exit
+exit
+
+Script done on Mon 28 Mar 2016 02:48:09 PM EDT
